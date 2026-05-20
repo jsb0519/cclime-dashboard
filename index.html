@@ -191,8 +191,12 @@ function render(employees) {
   branches.forEach(b => { data[b]={}; BELT_ORDER.forEach(l => data[b][l]=[]); });
   employees.forEach(e => {
     const belt = BELT_ORDER.includes(e.belt) ? e.belt : '실습생';
-    const role = e.role.includes('매니저') ? 'M' : 'B';
-    const tag  = [e.dateStr, e.name, role].filter(Boolean).join('.');
+    let prefix = '';
+    if (e.dateStr) {
+      const parts = e.dateStr.split('.');
+      prefix = String(parts[0]).slice(2) + '.' + (parts[1]||'');
+    }
+    const tag = prefix ? `${prefix}_${e.name}` : e.name;
     data[e.branch][belt].push(tag);
   });
 
